@@ -1,4 +1,5 @@
 import { ArrowLeft, Trash2 } from 'lucide-react';
+import { SmartAlarm } from '@/app/components/SmartAlarm';
 import { useState } from 'react';
 import { Button } from '@/app/components/ui/button';
 import { Card } from '@/app/components/ui/card';
@@ -107,6 +108,11 @@ export function Settings({ profile, onUpdate, onBack, onResetData }: SettingsPro
               />
             </div>
           </div>
+
+          <div className="mt-6 mb-2">
+            <SmartAlarm targetWakeTime={targetWakeTime} />
+          </div>
+
           <div>
             <Label htmlFor="caffeineTime" className="text-slate-300 mb-2 block">
               Caffeine Cutoff Time
@@ -136,11 +142,10 @@ export function Settings({ profile, onUpdate, onBack, onResetData }: SettingsPro
             <div
               key={strategy.id}
               onClick={() => toggleStrategy(strategy.id)}
-              className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all ${
-                selectedStrategies.includes(strategy.id)
+              className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all ${selectedStrategies.includes(strategy.id)
                   ? 'bg-emerald-500/20 border-emerald-400/50 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
                   : 'bg-slate-700/50 border-slate-600 hover:border-emerald-500/30'
-              }`}
+                }`}
             >
               <Checkbox checked={selectedStrategies.includes(strategy.id)} />
               <div className="flex-1">

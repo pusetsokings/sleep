@@ -1,5 +1,6 @@
 import { Moon, TrendingUp, CheckCircle2, Calendar, CloudRain, Star } from 'lucide-react';
 import { Card } from '@/app/components/ui/card';
+import { SmartAlarm } from '@/app/components/SmartAlarm';
 import { Button } from '@/app/components/ui/button';
 import { Badge } from '@/app/components/ui/badge';
 import { Progress } from '@/app/components/ui/progress';
@@ -137,6 +138,9 @@ export function Home({ profile, sleepEntries, habitEntries, onNavigate }: HomePr
           Log Tonight's Sleep
         </Button>
       </div>
+
+      {/* Smart Alarm */}
+      <SmartAlarm targetWakeTime={profile.targetWakeTime} />
 
       {/* Daily Tip */}
       <Card className="p-6 bg-gradient-to-br from-emerald-500/20 to-green-500/10 border-2 border-emerald-400/40 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
