@@ -1,4 +1,4 @@
-import { Moon, TrendingUp, CheckCircle2, Calendar, CloudRain } from 'lucide-react';
+import { Moon, TrendingUp, CheckCircle2, Calendar, CloudRain, Star } from 'lucide-react';
 import { Card } from '@/app/components/ui/card';
 import { Button } from '@/app/components/ui/button';
 import { Badge } from '@/app/components/ui/badge';
@@ -61,8 +61,8 @@ export function Home({ profile, sleepEntries, habitEntries, onNavigate }: HomePr
               <div
                 key={strategyId}
                 className={`flex items-center gap-3 p-3 rounded-lg border ${isCompleted
-                    ? 'bg-green-500/10 border-green-500/30'
-                    : 'bg-slate-700/50 border-slate-600'
+                  ? 'bg-green-500/10 border-green-500/30'
+                  : 'bg-slate-700/50 border-slate-600'
                   }`}
               >
                 {isCompleted ? (
@@ -90,15 +90,22 @@ export function Home({ profile, sleepEntries, habitEntries, onNavigate }: HomePr
           </div>
         </Card>
 
-        <Card className="p-4 bg-gradient-to-br from-orange-500/20 to-orange-600/10 border-orange-500/30">
-          <div className="flex items-center gap-2 mb-2">
-            <Calendar className="w-5 h-5 text-orange-400" />
-            <span className="text-sm text-orange-300">Current Streak</span>
+        {/* Gamified Streak Card */}
+        <Card className="p-4 bg-gradient-to-br from-indigo-500/20 to-purple-600/10 border-indigo-500/30 relative overflow-hidden group">
+          <div className="absolute -right-4 -top-4 w-24 h-24 bg-indigo-500/20 rounded-full blur-2xl group-hover:bg-indigo-400/30 transition-all duration-500"></div>
+          <div className="flex items-center gap-2 mb-2 relative z-10">
+            <Star className="w-5 h-5 text-indigo-400 fill-indigo-400/50" />
+            <span className="text-sm text-indigo-300 font-medium tracking-wide">Sleep Streak</span>
           </div>
-          <div className="text-3xl font-bold text-white">
+          <div className="text-3xl font-bold text-white relative z-10 flex items-baseline gap-1">
             {currentStreak}
-            <span className="text-lg text-slate-400"> days</span>
+            <span className="text-lg text-indigo-200/70 font-normal"> days</span>
           </div>
+          {currentStreak > 0 && (
+            <div className="mt-2 text-xs text-indigo-300/80 relative z-10">
+              {currentStreak >= 3 ? "🔥 You're on fire!" : "Keep it up!"}
+            </div>
+          )}
         </Card>
       </div>
 

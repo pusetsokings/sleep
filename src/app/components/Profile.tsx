@@ -1,4 +1,4 @@
-import { BarChart3, Settings, User, Award, TrendingUp } from 'lucide-react';
+import { BarChart3, Settings, User, Award, TrendingUp, Star } from 'lucide-react';
 import { Card } from '@/app/components/ui/card';
 import { Button } from '@/app/components/ui/button';
 import { Separator } from '@/app/components/ui/separator';
@@ -34,7 +34,7 @@ export function Profile({ profile, sleepEntries, habitEntries, onNavigate }: Pro
     const completed = dayHabits.filter(h => h.completed).length;
     const total = profile.selectedStrategies.length;
     const percentage = total > 0 ? (completed / total) * 100 : 0;
-    
+
     return {
       date: format(new Date(date), 'MMM d'),
       completion: Math.round(percentage)
@@ -164,6 +164,57 @@ export function Profile({ profile, sleepEntries, habitEntries, onNavigate }: Pro
           </ResponsiveContainer>
         </Card>
       )}
+
+      {/* Sleep Constellation (Gamification) */}
+      <Card className="p-6 bg-slate-900 border-indigo-500/30 shadow-[0_0_20px_rgba(99,102,241,0.1)] relative overflow-hidden">
+        {/* Decorative background stars */}
+        <div className="absolute inset-0 opacity-20 pointer-events-none">
+          <div className="absolute top-4 left-10 w-1 h-1 bg-white rounded-full"></div>
+          <div className="absolute top-20 left-1/4 w-2 h-2 bg-indigo-200 rounded-full blur-[1px]"></div>
+          <div className="absolute top-10 right-20 w-1.5 h-1.5 bg-blue-100 rounded-full animate-pulse"></div>
+          <div className="absolute bottom-10 left-1/3 w-1 h-1 bg-white rounded-full"></div>
+          <div className="absolute bottom-4 right-10 w-2 h-2 bg-purple-200 rounded-full blur-[1px]"></div>
+        </div>
+
+        <div className="flex items-center gap-2 mb-6 relative z-10">
+          <Star className="w-5 h-5 text-indigo-400 fill-indigo-400" />
+          <h3 className="font-semibold text-white">Your Sleep Constellation</h3>
+        </div>
+
+        <div className="flex flex-col items-center justify-center py-4 relative z-10">
+          <div className="flex items-center gap-3 mb-4">
+            {Array.from({ length: 7 }).map((_, i) => {
+              const date = subDays(new Date(), 6 - i);
+              const dateStr = format(date, 'yyyy-MM-dd');
+              const entry = sleepEntries.find(e => e.date === dateStr);
+              // A "star" is earned if sleep quality is 7+ OR they logged their sleep
+              const hasStar = entry && entry.quality >= 7;
+
+              return (
+                <div key={i} className="flex flex-col items-center gap-2">
+                  <div
+                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ${hasStar
+                        ? 'bg-indigo-500/20 shadow-[0_0_15px_rgba(99,102,241,0.4)]'
+                        : 'bg-slate-800 border border-slate-700'
+                      }`}
+                  >
+                    <Star
+                      className={`w-5 h-5 transition-all duration-500 ${hasStar
+                          ? 'text-indigo-300 fill-indigo-300 drop-shadow-[0_0_8px_rgba(165,180,252,0.8)]'
+                          : 'text-slate-600'
+                        }`}
+                    />
+                  </div>
+                  <span className="text-[10px] text-slate-400">{format(date, 'EE')}</span>
+                </div>
+              );
+            })}
+          </div>
+          <p className="text-sm text-indigo-200/70 text-center max-w-[250px]">
+            Log high-quality sleep (7/10 or better) to complete your weekly constellation.
+          </p>
+        </div>
+      </Card>
 
       {/* Focus Strategies */}
       <Card className="p-6 bg-slate-800 border-slate-700">
