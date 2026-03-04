@@ -1,4 +1,4 @@
-import { Moon, TrendingUp, CheckCircle2, Calendar } from 'lucide-react';
+import { Moon, TrendingUp, CheckCircle2, Calendar, CloudRain } from 'lucide-react';
 import { Card } from '@/app/components/ui/card';
 import { Button } from '@/app/components/ui/button';
 import { Badge } from '@/app/components/ui/badge';
@@ -56,15 +56,14 @@ export function Home({ profile, sleepEntries, habitEntries, onNavigate }: HomePr
           {profile.selectedStrategies.map((strategyId) => {
             const strategy = strategies.find(s => s.id === strategyId);
             const isCompleted = todayHabits.some(h => h.strategyId === strategyId && h.completed);
-            
+
             return strategy ? (
               <div
                 key={strategyId}
-                className={`flex items-center gap-3 p-3 rounded-lg border ${
-                  isCompleted 
-                    ? 'bg-green-500/10 border-green-500/30' 
+                className={`flex items-center gap-3 p-3 rounded-lg border ${isCompleted
+                    ? 'bg-green-500/10 border-green-500/30'
                     : 'bg-slate-700/50 border-slate-600'
-                }`}
+                  }`}
               >
                 {isCompleted ? (
                   <CheckCircle2 className="w-5 h-5 text-green-400" />
@@ -106,7 +105,7 @@ export function Home({ profile, sleepEntries, habitEntries, onNavigate }: HomePr
       {/* Quick Actions */}
       <div className="space-y-3">
         <h3 className="text-lg font-semibold text-white">Quick Actions</h3>
-        <Button 
+        <Button
           onClick={() => onNavigate('strategies')}
           className="w-full justify-start bg-slate-800 hover:bg-slate-700 text-white border border-slate-700"
           variant="outline"
@@ -114,7 +113,15 @@ export function Home({ profile, sleepEntries, habitEntries, onNavigate }: HomePr
           <Moon className="w-5 h-5 mr-2" />
           View All Strategies
         </Button>
-        <Button 
+        <Button
+          onClick={() => onNavigate('soundscapes')}
+          className="w-full justify-start bg-slate-800 hover:bg-slate-700 text-white border border-slate-700"
+          variant="outline"
+        >
+          <CloudRain className="w-5 h-5 mr-2" />
+          Play Soundscapes
+        </Button>
+        <Button
           onClick={() => onNavigate('track')}
           className="w-full justify-start bg-slate-800 hover:bg-slate-700 text-white border border-slate-700"
           variant="outline"
@@ -144,15 +151,15 @@ function getTimeOfDay(): string {
 
 function calculateStreak(habitEntries: HabitEntry[], selectedStrategies: number[]): number {
   if (selectedStrategies.length === 0) return 0;
-  
+
   let streak = 0;
   let currentDate = new Date();
-  
+
   while (true) {
     const dateStr = format(currentDate, 'yyyy-MM-dd');
     const dayHabits = habitEntries.filter(h => h.date === dateStr);
     const completedCount = dayHabits.filter(h => h.completed && selectedStrategies.includes(h.strategyId)).length;
-    
+
     // Consider day complete if at least half of selected strategies are done
     if (completedCount >= Math.ceil(selectedStrategies.length / 2)) {
       streak++;
@@ -160,11 +167,11 @@ function calculateStreak(habitEntries: HabitEntry[], selectedStrategies: number[
     } else {
       break;
     }
-    
+
     // Prevent infinite loop
     if (streak > 365) break;
   }
-  
+
   return streak;
 }
 
@@ -177,7 +184,7 @@ function getTodayTip(selectedStrategies: number[]): string {
     "Consistency is key! Go to bed and wake up at the same time, even on weekends.",
     "Your worry window can transform anxious thoughts into actionable plans."
   ];
-  
+
   if (selectedStrategies.length > 0) {
     const randomStrategyId = selectedStrategies[new Date().getDate() % selectedStrategies.length];
     const strategy = strategies.find(s => s.id === randomStrategyId);
@@ -185,6 +192,6 @@ function getTodayTip(selectedStrategies: number[]): string {
       return strategy.tips[0];
     }
   }
-  
+
   return tips[new Date().getDate() % tips.length];
 }
